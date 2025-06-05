@@ -1,0 +1,101 @@
+.root {
+    -fx-background-color: #BA4553;
+}
+
+.title {
+    -fx-font-family: "Hachi Maru Pop";
+    -fx-font-size: 72px;
+    -fx-text-fill: white;
+}
+
+#TimerText {
+    -fx-padding: -50 0 50 0;
+}
+
+.start-button {
+    -fx-background-color: white;
+    -fx-text-fill: #BA4553;
+    -fx-font-family: "Patrick Hand", "Marker Felt", cursive;
+    -fx-font-size: 48px;
+    -fx-padding: 10 40;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}.root {
+  -fx-background-color: #BA4553;    /* background */
+  -fx-text-fill: #FFFFFF;           /* foreground */
+  -fx-font-family: "Patrick Hand", "System", "Sans-Serif";
+}
+
+/* Muted */
+.muted {
+  -fx-background-color: #EAF0F7;
+  -fx-text-fill: #677488;
+}
+
+/* Popover */
+.popover {
+  -fx-background-color: #FFFFFF;
+  -fx-text-fill: #1B2A46;
+}
+
+/* Border */
+.border {
+  -fx-border-color: #BA4553;
+}
+
+/* Input fields */
+.input {
+  -fx-background-color: #BA4553;
+  -fx-text-fill: #1B2A46;
+}
+
+/* Card */
+.card {
+  -fx-background-color: BA4553;
+  -fx-text-fill: #BA4553;
+}
+
+/* Primary button or sections */
+.primary {
+  -fx-background-color: #BA4553;
+  -fx-text-fill: #F9FCFF;
+}
+
+/* Secondary button or sections */
+.secondary {
+  -fx-background-color: #EAF0F7;
+  -fx-text-fill: #BA4553;
+}
+
+/* Accent */
+.accent {
+  -fx-background-color: #EAF0F7;
+  -fx-text-fill: #BA4553;
+}
+
+/* Destructive (e.g. error or delete) */
+.destructive {
+  -fx-background-color: #FF0000;
+  -fx-text-fill: #F9FCFF;
+}
+
+/* Ring (could be used for focus outlines) */
+.ring {
+  -fx-background-color: #9AAECC;
+}
+
+/* Border radius sizes */
+.radius-lg {
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+}
+
+.radius-md {
+  -fx-background-radius: 6px;
+  -fx-border-radius: 6px;
+}
+
+.radius-sm {
+  -fx-background-radius: 4px;
+  -fx-border-radius: 4px;
+}

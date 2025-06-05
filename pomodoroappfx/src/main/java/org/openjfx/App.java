@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,8 +18,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("primary"), 650, 800);
+        scene.getStylesheets().add(getClass().getResource("/org/style.css").toExternalForm());
         stage.setScene(scene);
+        Font.loadFont(getClass().getResourceAsStream("/org/fonts/PatrickHand-Regular.ttf"), 12);
+        Font.loadFont(getClass().getResourceAsStream("/org/fonts/HachiMaruPop-Regular.ttf"), 12);
         stage.show();
     }
 
