@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.openjfx.BreakController" spacing="20" alignment="CENTER" styleClass="break-root"
+      prefWidth="650" prefHeight="800">
+    
+    <Label text="break time!" styleClass="break-title"/>
+    <Label fx:id="breakLabel" text="stand, stretch, take a breather!" styleClass="break-motivation-text"/>
+
+    <Label fx:id="breakTimerLabel" styleClass="break-main-timer"/>
+    <Label text="until focus time" styleClass="break-timer-text"/>
+
+    <Label fx:id="sessionTimerBreakLabel" text="2:00:00" styleClass="break-session-timer"/>
+    <Label text="left in this session" styleClass="break-session-subtext"/>
+
+    <Button text="reset session" styleClass="reset-button" onAction="#switchToSecondary"/>
+</VBox>
