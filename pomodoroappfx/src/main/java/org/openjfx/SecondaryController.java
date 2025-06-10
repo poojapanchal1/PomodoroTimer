@@ -31,17 +31,37 @@ public class SecondaryController {
     }
 
     @FXML
+    public Long getSessionTime(){
+        String selectedVal = sessionDropdown.getValue();
+        Long selectedNum = Long.parseLong(selectedVal.substring(0, 1));
+        System.err.println(selectedNum);
+        return selectedNum * 3600; //hours to seconds
+    }
+
+    @FXML
+    private Long getTimerInterval(){
+        long interval = getSessionTime();
+        long initialTimer = 0;
+        if (interval == 2){
+            initialTimer = 20;
+        } else {
+            initialTimer = 25;// 25 5, 25 5, 25 5, 25 5 +25 long break, repeat
+        }
+        return initialTimer * 60; //mins to seconds
+    }
+
+    @FXML
     private void switchToFocus(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("focus.fxml"));
         Parent root = loader.load(); 
 
         FocusController focusController = loader.getController();
-        focusController.setGoalText(goalInputText != null ? goalInputText.getText() : "Default Goal");
-        focusController.setTimer(5);
+        focusController.setGoalText(goalInputText != null ? goalInputText.getText() : "have a productive session!");
+        focusController.setTimer((long)5);
+        focusController.setSessionTimeRemaining(getSessionTime());
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.getScene().setRoot(root);
-
         focusController.startTimer(stage);
     }
 

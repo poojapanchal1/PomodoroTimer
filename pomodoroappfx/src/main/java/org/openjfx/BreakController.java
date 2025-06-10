@@ -34,22 +34,29 @@ public class BreakController {
         stage.getScene().setRoot(root);
     }
 
-    private int timeRemaining = 5;
-    public void switchToFocus(Stage stage) throws IOException {
+    public void switchToFocus(Stage stage, Long sessionTimeRemaining, long originalTime, int switchCount) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(App.class.getResource("focus.fxml"));
         Parent root = loader.load();
-        root.getStylesheets().add(getClass().getResource("/org/style.css").toExternalForm());
 
         FocusController focusController = loader.getController();
-        
         focusController.setGoalText(goalLabelText);
-        
-        focusController.setTimer(5);
+        focusController.setTimer(originalTime);
+        focusController.setSessionTimeRemaining(sessionTimeRemaining);
+        focusController.setSwitchCount(switchCount);
 
         stage.getScene().setRoot(root);
-
         focusController.startTimer(stage);
+    }
+
+    private long timeRemaining;
+
+    private long sessionTimeRemaining;
+
+    private int switchCount;
+
+    public void setSwitchCount(int count){
+        switchCount = count;
     }
 
     @FXML
@@ -57,27 +64,63 @@ public class BreakController {
 
     @FXML
     private String goalLabelText;
+
+    @FXML
+    private Label breakSessionTimerLabel;
+
    @FXML
     public void setGoalText(String goalText){
         goalLabelText = goalText;
     }
+
     @FXML
-    public void setTimer(Integer time){
-        breakTimerLabel.setText(time.toString());
+    public void setTimer(Long time){
+        timeRemaining = time;
+        breakTimerLabel.setText(formatTimeString(time));
+    }
+
+    @FXML
+    public void setSessionTimeRemaining(Long time){
+        sessionTimeRemaining = time;
+        breakSessionTimerLabel.setText(formatTimeString(time));
+    }
+
+    @FXML
+    public Long getSessionTimeRemaining(){
+        return Long.parseLong(breakSessionTimerLabel.getText());
+    }
+
+    @FXML
+    private String formatTimeString(Long time){
+        long hrs = time / 3600;
+        long mins = (time % 3600) / 60;
+        long secs = time % 60;
+        if (hrs == 0){
+            return String.format("%02d:%02d", mins, secs);
+        }
+        return String.format("%02d:%02d:%02d", hrs, mins, secs);
     }
 
     public void startTimer(Stage stage){
+        long originalTime = timeRemaining;
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                timeRemaining--;
+                timeRemaining --;
+                sessionTimeRemaining --;
                 setTimer(timeRemaining);
+                setSessionTimeRemaining(sessionTimeRemaining);
                 if (timeRemaining <= 0) {
                     timeline.stop();
                     try{
-                        switchToFocus(stage);
+                        if (switchCount < 4){
+                            switchToFocus(stage, sessionTimeRemaining, originalTime, switchCount);
+                        } else {
+                            switchCount = 0;
+                            //switch to long break screen
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -16,7 +16,7 @@
     <Label fx:id="breakTimerLabel" styleClass="break-main-timer"/>
     <Label text="until focus time" styleClass="break-timer-text"/>
 
-    <Label fx:id="sessionTimerBreakLabel" text="2:00:00" styleClass="break-session-timer"/>
+    <Label fx:id="breakSessionTimerLabel" text="2:00:00" styleClass="break-session-timer"/>
     <Label text="left in this session" styleClass="break-session-subtext"/>
 
     <Button text="reset session" styleClass="reset-button" onAction="#switchToSecondary"/>

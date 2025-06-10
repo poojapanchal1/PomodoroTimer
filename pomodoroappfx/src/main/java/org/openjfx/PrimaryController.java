@@ -21,7 +21,7 @@ public class PrimaryController {
         Parent root = loader.load();
 
         SecondaryController controller = loader.getController();
-        ObservableList<String> sessionTimes = FXCollections.observableArrayList("1 hr", "2 hr", "3 hr");
+        ObservableList<String> sessionTimes = FXCollections.observableArrayList("1 hr", "2 hrs", "3 hrs", "4 hrs");
         controller.setSessionDropDown(sessionTimes);
         
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
