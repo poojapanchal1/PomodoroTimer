@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -22,6 +23,9 @@ public class SecondaryController {
     
     @FXML
     private TextField goalInputText;
+
+    @FXML
+    public Label focusTimerLabel;
 
     @FXML
     private ComboBox<String> sessionDropdown;
@@ -57,7 +61,7 @@ public class SecondaryController {
 
         FocusController focusController = loader.getController();
         focusController.setGoalText(goalInputText != null ? goalInputText.getText() : "have a productive session!");
-        focusController.setTimer((long)5);
+        focusController.setTimer((long)5, focusTimerLabel);
         focusController.setSessionTimeRemaining(getSessionTime());
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

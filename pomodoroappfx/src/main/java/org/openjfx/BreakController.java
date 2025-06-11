@@ -16,117 +16,55 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class BreakController {
-    private Timeline timeline;
-    //for back button from focus to cancel/reset the session
-    @FXML
-    private void switchToSecondary(ActionEvent event) throws IOException {
-
-        timeline.stop();
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("secondary.fxml"));
-        Parent root = loader.load();
-
-        SecondaryController controller = loader.getController();
-        ObservableList<String> sessionTimes = FXCollections.observableArrayList("1 hr", "2 hr", "3 hr");
-        controller.setSessionDropDown(sessionTimes);
-        
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.getScene().setRoot(root);
-    }
-
-    public void switchToFocus(Stage stage, Long sessionTimeRemaining, long originalTime, int switchCount) throws IOException {
-
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("focus.fxml"));
-        Parent root = loader.load();
-
-        FocusController focusController = loader.getController();
-        focusController.setGoalText(goalLabelText);
-        focusController.setTimer(originalTime);
-        focusController.setSessionTimeRemaining(sessionTimeRemaining);
-        focusController.setSwitchCount(switchCount);
-
-        stage.getScene().setRoot(root);
-        focusController.startTimer(stage);
-    }
-
-    private long timeRemaining;
-
-    private long sessionTimeRemaining;
-
-    private int switchCount;
-
-    public void setSwitchCount(int count){
-        switchCount = count;
-    }
-
-    @FXML
-    private Label breakTimerLabel;
+public class BreakController extends CommonController {
 
     @FXML
     private String goalLabelText;
 
     @FXML
-    private Label breakSessionTimerLabel;
+    private Label nextScreenLabel;
 
    @FXML
     public void setGoalText(String goalText){
         goalLabelText = goalText;
     }
-
-    @FXML
-    public void setTimer(Long time){
-        timeRemaining = time;
-        breakTimerLabel.setText(formatTimeString(time));
-    }
-
-    @FXML
-    public void setSessionTimeRemaining(Long time){
-        sessionTimeRemaining = time;
-        breakSessionTimerLabel.setText(formatTimeString(time));
-    }
-
-    @FXML
-    public Long getSessionTimeRemaining(){
-        return Long.parseLong(breakSessionTimerLabel.getText());
-    }
-
-    @FXML
-    private String formatTimeString(Long time){
-        long hrs = time / 3600;
-        long mins = (time % 3600) / 60;
-        long secs = time % 60;
-        if (hrs == 0){
-            return String.format("%02d:%02d", mins, secs);
+  
+    public void setNextScreenLabel(int switchCount){
+        if (switchCount == 4){
+            nextScreenLabel.setText("until your longer break");
+        } else {
+            nextScreenLabel.setText("until focus time");
         }
-        return String.format("%02d:%02d:%02d", hrs, mins, secs);
+    }
+
+    public void switchToLongBreak(Stage stage, Long sessionTimeRemaining, int switchCount) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("longbreak.fxml"));
+        Parent root = loader.load();
+
+        LongBreakController longBreakController = loader.getController();
+        longBreakController.setTimer((long) 10);
+        longBreakController.setSessionTimeRemaining(sessionTimeRemaining);
+        longBreakController.setSwitchCount(switchCount);
+
+        stage.getScene().setRoot(root);
+        longBreakController.startTimer(stage);
     }
 
     public void startTimer(Stage stage){
         long originalTime = timeRemaining;
-        timeline = new Timeline();
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                timeRemaining --;
-                sessionTimeRemaining --;
-                setTimer(timeRemaining);
-                setSessionTimeRemaining(sessionTimeRemaining);
-                if (timeRemaining <= 0) {
-                    timeline.stop();
-                    try{
-                        if (switchCount < 4){
-                            switchToFocus(stage, sessionTimeRemaining, originalTime, switchCount);
-                        } else {
-                            switchCount = 0;
-                            //switch to long break screen
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+        super.startTimer(stage, () -> {
+            try {
+                if (switchCount < 4){
+                switchToFocus(stage, sessionTimeRemaining, originalTime, switchCount);
+            } else {
+                switchCount = 0;
+                switchToLongBreak(stage, getSessionTimeRemaining(), switchCount);
             }
-        }));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         timeline.play();
     }
 }
