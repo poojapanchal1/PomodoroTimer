@@ -2,18 +2,12 @@ package org.openjfx;
 
 import java.io.IOException;
 
-import javafx.util.Duration;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -60,8 +54,8 @@ public class SecondaryController {
         Parent root = loader.load(); 
 
         FocusController focusController = loader.getController();
-        focusController.setGoalText(goalInputText != null ? goalInputText.getText() : "have a productive session!");
-        focusController.setTimer((long)5, focusTimerLabel);
+        focusController.setGoalText(goalInputText != null && !goalInputText.getText().isBlank() ? goalInputText.getText() : "have a productive session!");
+        focusController.setTimer((long)5);
         focusController.setSessionTimeRemaining(getSessionTime());
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

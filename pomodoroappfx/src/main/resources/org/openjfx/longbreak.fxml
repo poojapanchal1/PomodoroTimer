@@ -13,10 +13,10 @@
     <Label text="time for a longer break!" styleClass="long-break-title"/>
     <Label fx:id="longBreakLabel" text="check your phone, grab a snack, enjoy!" styleClass="long-break-motivation-text"/>
 
-    <Label fx:id="longBreakTimerLabel" styleClass="long-break-main-timer"/>
+    <Label fx:id="timerLabel" styleClass="long-break-main-timer"/>
     <Label text="until focus time" styleClass="long-break-timer-text"/>
 
-    <Label fx:id="longBreakSessionTimerLabel" text="2:00:00" styleClass="session-timer"/>
+    <Label fx:id="sessionTimerLabel" text="2:00:00" styleClass="long-break-session-timer"/>
     <Label text="left in this session" styleClass="long-break-session-subtext"/>
 
     <Button text="reset session" styleClass="reset-button" onAction="#switchToSecondary"/>

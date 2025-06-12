@@ -2,67 +2,72 @@ package org.openjfx;
 
 import java.io.IOException;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-public class FocusController extends CommonController {
+public class FocusController extends CommonController{
+
+    @FXML
+    private Label sessionTimerLabel;
 
     @FXML
     private Label goalLabel;
 
     @FXML
-    private Label breakTimerLabel;
+    public void setGoalText(String goalInput) {
+        goalLabel.setText(goalInput);
+    }
 
     @FXML
-    public Label focusTimerLabel;
+    public void setSessionTimeRemaining(Long time){
+        sessionTimeRemaining = time;
+        sessionTimerLabel.setText(formatTimeString(time));
+    }
 
-    @FXML
-    public void setGoalText(String goalText){
-        goalLabel.setText(goalText);
+    public void setSwitchCount(int count){
+        switchCount = count;
     }
 
     @Override
-    public void switchToSecondary(ActionEvent event) throws IOException {
-        super.switchToSecondary(event);
-    }
-
-    public void switchToBreak(Stage stage, String goalText, Long sessionTimeRemaining, long originalTime, int switchCount, Label breakTimerLabel) throws IOException {
-        
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("break.fxml"));
-        Parent root = loader.load();
-
-        BreakController breakController = loader.getController();
-        breakController.setGoalText(goalText);
-        breakController.setTimer(originalTime, breakTimerLabel);
-        breakController.setSessionTimeRemaining(sessionTimeRemaining);
-        breakController.setSwitchCount(switchCount);
-        
-        stage.getScene().setRoot(root);
-        breakController.startTimer(stage);
+    public void setTimer(Long time) {
+        super.setTimer(time);
     }
 
     public void startTimer(Stage stage){
         long originalTime = timeRemaining;
         super.startTimer(stage, () -> {
-            try {
-                switchCount++;
-                switchToBreak(stage, goalLabel.getText(), sessionTimeRemaining, originalTime, switchCount, breakTimerLabel);
+            try{
+                switchCount ++;
+                switchToBreak(stage, goalLabel.getText(), sessionTimeRemaining, originalTime, switchCount);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void switchToBreak(Stage stage, String goalLabel, Long sessionTimeRemaining, long originalTime, int switchCount) throws IOException {
+    
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("break.fxml"));
+        Parent root = loader.load();
+
+        BreakController breakController = loader.getController();
+        breakController.setGoalText(goalLabel);
+        breakController.setTimer(originalTime);
+        breakController.setSessionTimeRemaining(sessionTimeRemaining);
+        breakController.setSwitchCount(switchCount);
+        breakController.setNextScreenLabel(switchCount);
+
+        stage.getScene().setRoot(root);
+
+        breakController.startTimer(stage);
+    }
+
+     @Override
+    public void switchToSecondary(ActionEvent event) throws IOException {
+        super.switchToSecondary(event);
     }
 }

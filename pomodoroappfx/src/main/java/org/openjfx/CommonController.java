@@ -30,25 +30,13 @@ public class CommonController {
     public Label sessionTimerLabel;
 
     @FXML
-    public Label focusTimerLabel;
-
-    @FXML
-    public Label goalLabel;
-
-    @FXML
-    private String goalLabelText;
+    public Label timerLabel;
 
     @FXML
     public void setSwitchCount(int count){
         switchCount = count;
     }
-
-    @FXML
-    public void setTimer(Long time, Label timerLabel){
-        timeRemaining = time;
-        timerLabel.setText(formatTimeString(time));
-    }
-
+    
     @FXML
     public void setSessionTimeRemaining(Long time){
         sessionTimeRemaining = time;
@@ -76,6 +64,12 @@ public class CommonController {
     }
 
     @FXML
+    public void setTimer(Long time){
+        timeRemaining = time;
+        timerLabel.setText(formatTimeString(time));
+    }
+
+    @FXML
     public void switchToSecondary(ActionEvent event) throws IOException {
         timeline.stop();
         FXMLLoader loader = new FXMLLoader(App.class.getResource("secondary.fxml"));
@@ -89,14 +83,14 @@ public class CommonController {
         stage.getScene().setRoot(root);
     }
 
-    public void switchToFocus(Stage stage, Long sessionTimeRemaining, long originalTime, int switchCount) throws IOException {
+    public void switchToFocus(Stage stage, Long sessionTimeRemaining, long originalTime, int switchCount, String goalLabel) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(App.class.getResource("focus.fxml"));
         Parent root = loader.load();
 
         FocusController focusController = loader.getController();
-        focusController.setGoalText(goalLabelText);
-        focusController.setTimer(originalTime, focusTimerLabel);
+        focusController.setGoalText(goalLabel);
+        focusController.setTimer(originalTime);
         focusController.setSessionTimeRemaining(sessionTimeRemaining);
         focusController.setSwitchCount(switchCount);
 
@@ -105,7 +99,6 @@ public class CommonController {
     }
 
     public void startTimer(Stage stage, Runnable onTimerEnd){
-        long originalTime = timeRemaining;
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
@@ -118,12 +111,10 @@ public class CommonController {
                 if (timeRemaining <= 0) {
                     timeline.stop();
                     onTimerEnd.run();
-                    // try{
-                    //     switchCount ++;
-                    //     switchToBreak(stage, goalLabel.getText(), sessionTimeRemaining, originalTime, switchCount);
-                    // } catch (IOException e) {
-                    //     e.printStackTrace();
-                    // }
+                }
+                if (sessionTimeRemaining <= 0) {
+                    timeline.stop();
+                    //show congrats page? or reset to home
                 }
             }
         }));

@@ -2,31 +2,30 @@ package org.openjfx;
 
 import java.io.IOException;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class BreakController extends CommonController {
 
     @FXML
-    private String goalLabelText;
-
-    @FXML
     private Label nextScreenLabel;
 
-   @FXML
+    @Override
+    public void setTimer(Long time) {
+        super.setTimer(time);
+    }
+
+    private String goalText;
+
     public void setGoalText(String goalText){
-        goalLabelText = goalText;
+        this.goalText = goalText;
+    }
+    
+    public String getGoalText() {
+        return goalText;
     }
   
     public void setNextScreenLabel(int switchCount){
@@ -37,7 +36,28 @@ public class BreakController extends CommonController {
         }
     }
 
-    public void switchToLongBreak(Stage stage, Long sessionTimeRemaining, int switchCount) throws IOException {
+    @Override
+    public void setSessionTimeRemaining(Long time) {
+        super.setSessionTimeRemaining(time);
+    }
+
+    @Override
+    public Long getSessionTimeRemaining() {
+        return super.getSessionTimeRemaining();
+    }
+
+    @Override
+    public void setSwitchCount(int count) {
+        super.setSwitchCount(count);
+    }
+
+    @Override
+    public void switchToFocus(Stage stage, Long sessionTimeRemaining, long originalTime, int switchCount, String goalLabel)
+            throws IOException {
+        super.switchToFocus(stage, sessionTimeRemaining, originalTime, switchCount, goalLabel);
+    }
+
+    public void switchToLongBreak(Stage stage, Long sessionTimeRemaining, long originalTime, int switchCount) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(App.class.getResource("longbreak.fxml"));
         Parent root = loader.load();
@@ -56,15 +76,14 @@ public class BreakController extends CommonController {
         super.startTimer(stage, () -> {
             try {
                 if (switchCount < 4){
-                switchToFocus(stage, sessionTimeRemaining, originalTime, switchCount);
+                switchToFocus(stage, sessionTimeRemaining, originalTime, switchCount, goalText);
             } else {
                 switchCount = 0;
-                switchToLongBreak(stage, getSessionTimeRemaining(), switchCount);
+                switchToLongBreak(stage, getSessionTimeRemaining(), originalTime, switchCount);
             }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        timeline.play();
     }
 }

@@ -12,7 +12,7 @@
     <Label text="it's time to focus!" styleClass="focus-title"/>
     <Label fx:id="goalLabel" text="Default Text" styleClass="goal-text"/>
 
-    <Label fx:id="focusTimerLabel" styleClass="main-timer"/>
+    <Label fx:id="timerLabel" styleClass="main-timer"/>
     <Label text="until your break" styleClass="break-text"/>
 
     <Label fx:id="sessionTimerLabel" text="2:00:00" styleClass="session-timer"/>
